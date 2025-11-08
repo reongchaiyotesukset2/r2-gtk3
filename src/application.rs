@@ -50,15 +50,25 @@ mod imp {
                                  //use write code application.rs style
                     let button1_action = gio::ActionEntry::builder("button1")
                    .activate(|app: &Self::Type, _, _| {           
-                           // i would like call window on provider
+                            let model = &app.imp().model;
+                            
+                            let provider = ProviderPage::default();
+                            provider.present();
+                    }).build();
+                    //after write sussessfuly we leaning how to call on provider chang perferance
+                   /*code run ok
+                   let button1_action = gio::ActionEntry::builder("button1")
+                   .activate(|app: &Self::Type, _, _| {           
+                          
                             let model = &app.imp().model;
                             let window = app.active_window();
-                         //let preferences = PreferencesWindow::new(&model);
+                         // waiting learn code between  PreferencesWindow::new(&model); and PreferencesWindow::default();
+                        
+                         
                          let preferences = PreferencesWindow::default();
                          preferences.present();
                     }).build();
-                
-                   
+                   */
                     app.add_action_entries([
                        button1_action,
                      			   			               

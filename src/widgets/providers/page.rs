@@ -28,8 +28,7 @@ mod imp {
     
         #[property(get, set, construct)]
         pub is_locked: Cell<bool>, 
-        #[template_child]
-        pub delete_button: TemplateChild<gtk::Button>,
+       
         pub selected_provider: RefCell<Option<Provider>>,
         pub selected_image: RefCell<Option<gio::File>>,
     }
@@ -38,16 +37,15 @@ mod imp {
     impl ObjectSubclass for ProviderPage {
         const NAME: &'static str = "ProviderPage";
         type Type = super::ProviderPage;
-        type ParentType = gtk::ApplicationWindow;
+        // testing from gtk::Window run sussess
+        // config gtk initiative to gtk::Window from gtkApplicationWindow
+        type ParentType = gtk::Window;
 
         fn new() -> Self {
             
             Self {
                 actions: gio::SimpleActionGroup::new(),
-            
-               is_locked : Cell::default(),
-                delete_button: TemplateChild::default(),
-     
+                is_locked : Cell::default(),
                 selected_provider: RefCell::default(),
                 selected_image: RefCell::default(),
             }
@@ -82,8 +80,8 @@ mod imp {
     }
    
     impl  WindowImpl for ProviderPage {} //add new
-    impl WidgetImpl for ProviderPage {}
-    impl ApplicationWindowImpl for ProviderPage {}  //add new
+    impl  WidgetImpl for ProviderPage {}
+    impl  ApplicationWindowImpl for ProviderPage {}  //add new
     impl  BinImpl for ProviderPage {} //add new
     impl  ContainerImpl for ProviderPage {} //add new
     
@@ -91,7 +89,8 @@ mod imp {
 
 glib::wrapper! {
     pub struct ProviderPage(ObjectSubclass<imp::ProviderPage>)
-        @extends gtk::Widget,gtk::Window,
+       //  @extends relation type ParentType = gtk::Window;
+        @extends gtk::Widget,gtk::ApplicationWindow, gtk::Window,
         @implements gtk::Buildable;
 }
 

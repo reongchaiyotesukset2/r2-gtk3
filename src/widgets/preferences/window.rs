@@ -89,6 +89,7 @@ impl PreferencesWindow {
 		}
 }
 //test add code and set default
+// if we set impl Default for preferences we can use on application 
 impl Default for PreferencesWindow {
     fn default() -> Self {
         glib::Object::new()
