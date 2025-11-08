@@ -6,7 +6,7 @@ use gtk::{
     prelude::*,
 };
 use crate::{
-    widgets::{Window,PreferencesWindow},
+    widgets::{Window,PreferencesWindow,ProviderPage},
     models::{ProvidersModel,start as start_search_provider},
     utils::{spawn}, //new
 };
@@ -16,14 +16,15 @@ use crate::config;
 use std::rc::Rc;
 
 mod imp {
-  use std::cell::{Cell,RefCell};
+  //use std::cell::OnceCell;
+  use std::cell::{Cell,RefCell,OnceCell};
   use super::*;
   //#[derive(Debug)]
   #[derive(Default,glib::Properties,Debug)]
   #[properties(wrapper_type = super::Application)]
   pub struct Application {
         pub window: RefCell<Option<glib::WeakRef<Window>>>,
-        pub model: ProvidersModel,
+         pub model: ProvidersModel,
         #[property(get, set, construct)]
         pub is_locked: Cell<bool>,
     }
@@ -44,17 +45,17 @@ mod imp {
               
                 self.parent_startup();
                 
-                let app = self.obj();
-
-                                 
+                 let app = self.obj();
+                 
+                                 //use write code application.rs style
                     let button1_action = gio::ActionEntry::builder("button1")
                    .activate(|app: &Self::Type, _, _| {           
-                           
-                           if app.is_locked(){
-							   println!("if");
-						   }else{
-							   println!("else");
-						   }
+                           // i would like call window on provider
+                            let model = &app.imp().model;
+                            let window = app.active_window();
+                         //let preferences = PreferencesWindow::new(&model);
+                         let preferences = PreferencesWindow::default();
+                         preferences.present();
                     }).build();
                 
                    
@@ -89,6 +90,7 @@ mod imp {
                 window.present();
                 self.window.replace(Some(window.downgrade()));
             }
+            
             fn open(&self, _files: &[gio::File], _hint: &str) 
             {
                //self.activate();
