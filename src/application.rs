@@ -6,7 +6,7 @@ use gtk::{
     prelude::*,
 };
 use crate::{
-    widgets::{Window,PreferencesWindow},
+    widgets::{Window,PreferencesWindow,ProviderPage},
     models::{ProvidersModel,start as start_search_provider},
     utils::{spawn}, //new
 };
@@ -16,14 +16,15 @@ use crate::config;
 use std::rc::Rc;
 
 mod imp {
-  use std::cell::{Cell,RefCell};
+  //use std::cell::OnceCell;
+  use std::cell::{Cell,RefCell,OnceCell};
   use super::*;
   //#[derive(Debug)]
   #[derive(Default,glib::Properties,Debug)]
   #[properties(wrapper_type = super::Application)]
   pub struct Application {
         pub window: RefCell<Option<glib::WeakRef<Window>>>,
-        pub model: ProvidersModel,
+         pub model: ProvidersModel,
         #[property(get, set, construct)]
         pub is_locked: Cell<bool>,
     }
@@ -44,20 +45,30 @@ mod imp {
               
                 self.parent_startup();
                 
-                let app = self.obj();
-
-                                 
+                 let app = self.obj();
+                 
+                                 //use write code application.rs style
                     let button1_action = gio::ActionEntry::builder("button1")
                    .activate(|app: &Self::Type, _, _| {           
-                           
-                           if app.is_locked(){
-							   println!("if");
-						   }else{
-							   println!("else");
-						   }
+                            let model = &app.imp().model;
+                            
+                            let provider = ProviderPage::default();
+                            provider.present();
                     }).build();
-                
-                   
+                    //after write sussessfuly we leaning how to call on provider chang perferance
+                   /*code run ok
+                   let button1_action = gio::ActionEntry::builder("button1")
+                   .activate(|app: &Self::Type, _, _| {           
+                          
+                            let model = &app.imp().model;
+                            let window = app.active_window();
+                         // waiting learn code between  PreferencesWindow::new(&model); and PreferencesWindow::default();
+                        
+                         
+                         let preferences = PreferencesWindow::default();
+                         preferences.present();
+                    }).build();
+                   */
                     app.add_action_entries([
                        button1_action,
                      			   			               
@@ -89,6 +100,7 @@ mod imp {
                 window.present();
                 self.window.replace(Some(window.downgrade()));
             }
+            
             fn open(&self, _files: &[gio::File], _hint: &str) 
             {
                //self.activate();

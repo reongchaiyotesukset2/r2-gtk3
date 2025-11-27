@@ -77,11 +77,10 @@ glib::wrapper! {
 
 
 impl PreferencesWindow {
-     pub fn new(model: &ProvidersModel) -> Self {
-
-        glib::Object::builder().property("model", model).build()
-      }
-	   
+/* pub fn new(model: &ProvidersModel) -> Self {
+   glib::Object::builder().property("model", model).build()
+   }
+*/   
 		fn setup_actions(&self) {
            let imp = self.imp();
 		}
@@ -89,3 +88,11 @@ impl PreferencesWindow {
 	       let imp = self.imp();
 		}
 }
+//test add code and set default
+// if we set impl Default for preferences we can use on application 
+impl Default for PreferencesWindow {
+    fn default() -> Self {
+        glib::Object::new()
+    }
+}
+

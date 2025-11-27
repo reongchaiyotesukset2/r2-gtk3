@@ -15,3 +15,4 @@ tracing-subscriber = {version = "0.3", default-features = false, features = ["fm
 #new
 futures-channel = "0.3.30"
 tokio = {version = "1.0", default-features = false, features = ["rt-multi-thread", "fs", "io-util"]}
+anyhow = "1.0"
